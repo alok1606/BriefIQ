@@ -15,6 +15,13 @@ Live Tavily and Bifrost inference were **not exercised**: no live API credential
 
 Browser automation ended because it could not verify the Windows browser URL. Frontend validation therefore used Streamlit AppTest and HTTP startup checks; a visual browser screenshot/responsive layout audit was not completed.
 
-Standard dependency installation encountered download timeouts. QA used an isolated virtual environment with access to existing host packages, verified PyPI wheels for missing UI/test dependencies, and the bundled ReportLab/pypdf packages. All direct requirements are pinned; a completely clean `pip install -r requirements.txt` was not completed in this session. `pip check` on the shared QA environment reported a pre-existing TensorFlow/protobuf conflict; TensorFlow is not used by BriefIQ. CI defines Python 3.11/3.13 clean installs, whose results must be checked separately.
+Local dependency installation encountered download timeouts. Local QA used an isolated virtual environment with access to existing host packages, verified PyPI wheels for missing UI/test dependencies, and bundled ReportLab/pypdf packages. `pip check` on the shared local QA environment reported a pre-existing TensorFlow/protobuf conflict; TensorFlow is not used by BriefIQ. Clean installation was subsequently verified by GitHub Actions, as recorded below.
 
-The GitHub account was verified as `alok1606`; the user created `https://github.com/alok1606/BriefIQ` and granted the integration access. Write access was verified by a successful initialization commit. Source publication uses the authenticated GitHub connector. CI outcomes must be checked independently of the executed local tests above. The local repository has the correct origin configured.
+The complete source was published to `https://github.com/alok1606/BriefIQ` on main, commit `31db5da6b36d748ea107d6a8ac43f3cafcee706b`, using the authenticated GitHub connector. The local checkout was synchronized and tracks origin/main.
+
+## GitHub Actions verification
+
+Run: https://github.com/alok1606/BriefIQ/actions/runs/43683100525
+
+Both `test (3.11)` and `test (3.13)` completed successfully on Linux. Each job successfully executed `python -m pip install -r requirements.txt` and `python -m pytest -q`. This verifies clean dependency installation and the automated suite on both supported Python versions for the published application commit. Live credentials are not used in CI.
+
