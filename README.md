@@ -4,6 +4,16 @@
 
 A Python 3.11+ / Streamlit research agent for preparing a concise, source-attributed meeting brief from the 30 days preceding a company or public professional meeting. Tavily searches live public information; Maxim AI's Bifrost is the sole inference gateway. Includes a deliberately fictional, offline demo.
 
+## Hackathon submission
+
+- Project title: **BriefIQ: Pre-Meeting Briefing Agent**
+- [Demo video (MP4)](https://raw.githubusercontent.com/alok1606/BriefIQ/main/submission/BriefIQ-demo.mp4)
+- [Presentation (PPTX)](submission/BriefIQ-Hackathon-2026.pptx)
+- [Copy-and-paste submission fields](submission/README.md)
+- [Video captions](submission/BriefIQ-demo.srt)
+
+The two-minute demo is a narrated walkthrough using screenshots from the running application, with synthetic narration. It is not a continuous screen recording or a public app deployment.
+
 ## Run on Windows in VS Code (no administrator rights)
 
 Install Python 3.11+ for your user account with the Python installer, then open this folder in VS Code. Use a PowerShell terminal:

@@ -1,0 +1,123 @@
+1
+00:00:00,000 --> 00:00:05,075
+Brief I Q is our pre meeting briefing agent for Global AI Hackathon twenty twenty six, Problem Statement five.
+
+2
+00:00:05,075 --> 00:00:07,212
+It helps users walk into every meeting prepared.
+
+3
+00:00:07,212 --> 00:00:09,883
+This narrated walkthrough uses screenshots captured from the running application.
+
+4
+00:00:11,083 --> 00:00:14,263
+Preparing for a meeting often means searching across scattered announcements and news articles.
+
+5
+00:00:14,263 --> 00:00:15,731
+A summary alone is not enough.
+
+6
+00:00:15,731 --> 00:00:20,133
+We need to know what changed recently, why it could matter, and where each factual finding came from.
+
+7
+00:00:21,333 --> 00:00:26,450
+The user chooses a company or public professional, enters the scheduled meeting time and timezone, and can add a meeting purpose.
+
+8
+00:00:26,450 --> 00:00:30,592
+Brief I Q calculates the preceding thirty days and limits future meeting research to information available now.
+
+9
+00:00:31,792 --> 00:00:35,549
+Tavily runs focused searches for launches, leadership changes, and other meaningful developments.
+
+10
+00:00:35,549 --> 00:00:39,620
+The backend filters dates and duplicates, then assembles evidence with stable source identifiers.
+
+11
+00:00:39,620 --> 00:00:41,499
+Bifrost routes that evidence to Gemini.
+
+12
+00:00:41,499 --> 00:00:45,883
+Pydantic checks the structured response and citation identifiers before the application renders the briefing.
+
+13
+00:00:47,083 --> 00:00:51,182
+The result organizes recent context into an executive summary, key developments, and potential implications.
+
+14
+00:00:51,182 --> 00:00:53,524
+It also suggests discussion points and open questions.
+
+15
+00:00:53,524 --> 00:00:54,988
+Evidence labels make attribution visible.
+
+16
+00:00:54,988 --> 00:01:00,550
+The source backed label means the finding cites a retrieved excerpt, so users should still verify the original page.
+
+17
+00:01:01,750 --> 00:01:06,900
+Each citation opens its source page, and the evidence trail shows retrieved excerpts and publication dates.
+
+18
+00:01:06,900 --> 00:01:08,832
+Unknown or ambiguous dates remain uncertain.
+
+19
+00:01:08,832 --> 00:01:10,441
+Unknown citation identifiers cause rejection.
+
+20
+00:01:10,441 --> 00:01:15,592
+Historical briefings explain verification limits, while future meetings cannot include developments that have not happened yet.
+
+21
+00:01:16,792 --> 00:01:19,231
+Bifrost is a real part of the inference path.
+
+22
+00:01:19,231 --> 00:01:23,296
+Every model request goes through the authenticated gateway to Gemini three point five Flash Lite.
+
+23
+00:01:23,296 --> 00:01:26,006
+The application exposes the requested model and available usage metadata.
+
+24
+00:01:26,006 --> 00:01:29,800
+Provider credentials stay outside the source code, and no direct provider fallback bypasses Bifrost.
+
+25
+00:01:31,000 --> 00:01:35,225
+Users can download a readable one page PDF, complete Markdown, or copy the briefing text.
+
+26
+00:01:35,225 --> 00:01:40,013
+If an unusually long report needs more space, the application labels a complete multi page PDF clearly.
+
+27
+00:01:40,013 --> 00:01:43,675
+It preserves findings, uncertainty notes, and cited links instead of silently cutting content.
+
+28
+00:01:44,875 --> 00:01:46,402
+Forty eight automated tests pass.
+
+29
+00:01:46,402 --> 00:01:50,984
+We also verified live Tavily research, Bifrost routed Gemini inference, citation validation, and PDF export.
+
+30
+00:01:50,984 --> 00:01:55,260
+The project runs locally, with a clearly labeled fictional demo when credentials are unavailable.
+
+31
+00:01:55,260 --> 00:01:58,925
+The full source and setup instructions are in the linked GitHub repository.
