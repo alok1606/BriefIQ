@@ -43,8 +43,9 @@ class BifrostClient:
             "Use evidence=source_backed only for claims explicitly supported by cited in_window excerpts; otherwise uncertain. "
             "Why it matters is a hypothesis, not an established fact; phrase it conditionally. Questions must not presuppose "
             "unsupported facts. Produce 3-5 developments when evidence allows, fewer otherwise, 3-5 short questions "
-            "(each <=160 characters), and short uncertainty notes (each <=180 characters). Keep the entire report under "
-            "550 words. Return ONLY JSON conforming to the following schema: " + json.dumps(Draft.model_json_schema())
+            "(each <=160 characters), and short uncertainty notes (each <=180 characters). Target 350-400 words total "
+            "across summary, developments, implications, discussion points, questions and uncertainty notes. "
+            "Avoid repeating the same finding in summary and developments. Return ONLY JSON conforming to the following schema: " + json.dumps(Draft.model_json_schema())
         )
         payload = {"model": self.settings.model, "messages": [
             {"role": "system", "content": system},

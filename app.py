@@ -1,9 +1,11 @@
 from dataclasses import replace
 from datetime import date, datetime, time, timezone
 from html import escape
+from io import BytesIO
 from zoneinfo import ZoneInfo, available_timezones
 
 import streamlit as st
+from pypdf import PdfReader
 
 from src.bifrost_client import BifrostClient
 from src.config import Settings
@@ -164,7 +166,13 @@ if b:
         pdf = export_pdf(b)
         c2.download_button("↓ Download one-page PDF", pdf, "briefiq.pdf", "application/pdf", use_container_width=True)
     except BriefIQError as exc:
-        c2.warning(str(exc))
+        try:
+            pdf = export_pdf(b, one_page=False)
+            pages = len(PdfReader(BytesIO(pdf)).pages)
+            c2.download_button(f"↓ Download complete PDF · {pages} pages", pdf, "briefiq-complete.pdf", "application/pdf", use_container_width=True)
+            c2.caption(f"Full text and cited sources retained across {pages} pages; this report could not fit one readable page.")
+        except BriefIQError as complete_error:
+            c2.error(str(complete_error))
     with st.expander("Copy briefing text"):
         st.caption("Use the copy icon at the top right of this text block.")
         st.code(md, language=None)

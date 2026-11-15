@@ -65,7 +65,7 @@ Retrieved excerpts and all user fields are sent as untrusted data, with system-l
 
 ## Exports
 
-Reports contain subject/time, research period, executive summary, up to five developments with implications and discussion points, three to five questions, references, and uncertainty notes. PDF references are clickable full-URL annotations with readable titles/IDs. All evidence references and scope notes are preserved. The exporter retries layout at 9, 8.5, then 8 point text and checks actual page count with pypdf. If content cannot fit one A4 page, it raises a visible error and offers the complete Markdown; it never cuts content to force fit. The UI's code block includes a built-in copy button.
+Reports contain subject/time, research period, executive summary, up to five developments with implications and discussion points, three to five questions, references, and uncertainty notes. New generations target 350-400 narrative words. The PDF includes all cited sources; unused research stays in the evidence panel and complete Markdown. It first tries readable source titles, then compact publisher/date references in three columns, retaining stable citation IDs and the full destination URLs. Text stays at 8 points or larger, and actual page count is checked with pypdf. Every finding, implication, question, and uncertainty note is retained. When an unusually long report cannot fit one A4 page, the UI offers a clearly labeled complete multi-page PDF with its page count, alongside Markdown. It never silently cuts content or presents multiple pages as a one-page export. The UI's code block includes a built-in copy button.
 
 ## Automated tests
 

@@ -14,7 +14,7 @@ def validate_draft(draft, evidence):
         note = "Uncertain claims require verification. Citation presence is not independent fact-checking; review the source excerpts."
         if note not in draft.uncertainty:
             draft.uncertainty.append(note)
-    text = " ".join([*(c.text for c in draft.summary), *(d.text + d.why_it_matters + d.discussion_point for d in draft.developments), *draft.questions, *draft.uncertainty])
+    text = " ".join([*(c.text for c in draft.summary), *(" ".join([d.text, d.why_it_matters, d.discussion_point]) for d in draft.developments), *draft.questions, *draft.uncertainty])
     if len(text.split()) > 600 or any(len(q) > 220 for q in draft.questions) or any(len(n) > 260 for n in draft.uncertainty):
         raise BriefIQError("The model exceeded the one-page content budget. Retry generation.")
     return draft

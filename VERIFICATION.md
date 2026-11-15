@@ -4,7 +4,7 @@ Verified on Windows, Python 3.13.4, 15 November 2026.
 
 ## Current local checks
 
-- Full automated suite: **44 passed in 5.50 seconds** in the project's clean `.venv` (`python -m pytest -q`).
+- Full automated suite: **48 passed in 6.10 seconds** in the project's clean `.venv` (`python -m pytest -q`), after the PDF overflow fix.
 - `python -m pip check`: **No broken requirements found**.
 - BriefIQ started at `http://127.0.0.1:8501`; its health endpoint returned **ok**.
 - Bifrost v2.4.0 started at `http://127.0.0.1:8787` with SQLite configuration storage and active governance.
@@ -13,6 +13,10 @@ Verified on Windows, Python 3.13.4, 15 November 2026.
 - Full live pipeline: Microsoft meeting on 16 November 2026, Tavily's three searches, **12 retrieved sources**, **4 generated developments**, and citation-ID validation succeeded. The run was explicitly live, not fixture mode.
 - Live Markdown and one-page PDF exports were generated. The PDF was rendered with Poppler and visually inspected; no clipping or missing references was observed.
 - Demo mode, mocked HTTP failures/timeouts, citation rejection, uncertain dates, DST validation, PDF overflow handling, and Streamlit AppTest remain covered by automated tests.
+
+## PDF overflow regression
+
+The original exporter included every retrieved article, even unused evidence, and repeated long references. The revised exporter includes all cited sources, switches to compact three-column references when needed, and preserves complete destination URLs. A dense five-development report with all 12 sources cited was verified on one page; all claim text, implications, discussion points, IDs and URL annotations are checked. Poppler rendering was visually inspected. Unused research remains in the complete Markdown and evidence panel. A deliberately oversized report verifies complete multi-page export with all 1,500 repeated test phrases retained, and Streamlit AppTest verifies that its download button is offered. No narrative text or uncertainty notes are silently removed. New LLM requests target 350-400 narrative words.
 
 ## Windows gateway fixes
 

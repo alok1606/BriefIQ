@@ -1,5 +1,6 @@
 from io import BytesIO
 from pathlib import Path
+from urllib.parse import urlsplit
 from xml.sax.saxutils import escape
 
 from reportlab.lib import colors
@@ -8,26 +9,36 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Table
 from reportlab.platypus.doctemplate import LayoutError
 from pypdf import PdfReader
 
 from .utils import BriefIQError
 
 
-def export_pdf(brief):
+def export_pdf(brief, *, one_page=True):
+    """Preserve every claim/note and every cited URL; compact references if needed.
+
+    Uncited research remains in the evidence trail and Markdown. The complete
+    multi-page option is explicit and never masquerades as a one-page export.
+    """
+    citation_ids = {i for c in [*brief.draft.summary, *brief.draft.developments] for i in c.citation_ids}
+    sources = [s for s in brief.evidence.sources if s.id in citation_ids]
+    if citation_ids - {s.id for s in sources}:
+        raise BriefIQError("A cited source is missing from this briefing. PDF export was rejected.")
     font = "Helvetica"
     fontpath = Path(__file__).resolve().parents[1] / "assets/DejaVuSans.ttf"
     if fontpath.exists():
         if "BriefIQ" not in pdfmetrics.getRegisteredFontNames():
             pdfmetrics.registerFont(TTFont("BriefIQ", str(fontpath)))
         font = "BriefIQ"
-    for size in (9, 8.5, 8):
+    layouts = [(9, False), (9, True), (8.5, True), (8, True)] if one_page else [(9, False)]
+    for size, compact_references in layouts:
         buffer = BytesIO()
-        body = ParagraphStyle("body", fontName=font, fontSize=size, leading=size * 1.3,
-                              textColor=colors.HexColor("#24324c"), spaceAfter=3, alignment=TA_LEFT)
+        body = ParagraphStyle("body", fontName=font, fontSize=size, leading=size * (1.2 if compact_references else 1.3),
+                              textColor=colors.HexColor("#24324c"), spaceAfter=2 if compact_references else 3, alignment=TA_LEFT)
         heading = ParagraphStyle("heading", parent=body, fontSize=size + 2, leading=size + 4,
-                                 textColor=colors.HexColor("#146e72"), spaceBefore=7, spaceAfter=4)
+                                 textColor=colors.HexColor("#146e72"), spaceBefore=5 if compact_references else 7, spaceAfter=3 if compact_references else 4)
         story = []
         def p(text, style=body):
             story.append(Paragraph(text, style))
@@ -54,9 +65,28 @@ def export_pdf(brief):
         p("Open questions", heading)
         for q in brief.draft.questions:
             p("- " + safe(q))
-        p("Source references (click to verify)", heading)
-        for s in brief.evidence.sources:
-            p(f'[{s.id}] <link href="{escape(s.url, {chr(34): "&quot;"})}" color="#146e72">{safe(s.title)}</link> | {safe(s.published or "Date unknown")} | {s.date_status}')
+        p("Cited sources (full URLs linked)", heading)
+        reference_cells = []
+        for s in sources:
+            # A compact citation still contains its stable ID, publisher, date,
+            # uncertainty status and complete destination URL annotation.
+            label = urlsplit(s.url).hostname if compact_references else s.title
+            published = (s.published or "Date unknown")[:10] if s.published else "Date unknown"
+            status = "" if s.date_status == "in_window" else " | " + s.date_status
+            reference = f'[{s.id}] <link href="{escape(s.url, {chr(34): "&quot;"})}" color="#146e72">{safe(label)}</link> | {safe(published)}{safe(status)}'
+            if compact_references:
+                reference_cells.append(Paragraph(reference, body))
+            else:
+                p(reference)
+        if reference_cells:
+            rows = [reference_cells[i:i+3] for i in range(0, len(reference_cells), 3)]
+            rows[-1] += [""] * (3 - len(rows[-1]))
+            story.append(Table(rows, colWidths=[(A4[0] - 72) / 3] * 3, hAlign="LEFT", style=[
+                ("VALIGN", (0, 0), (-1, -1), "TOP"), ("LEFTPADDING", (0, 0), (-1, -1), 0),
+                ("RIGHTPADDING", (0, 0), (-1, -1), 5), ("TOPPADDING", (0, 0), (-1, -1), 1),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 1)]))
+        if not sources:
+            p("No source-backed claims available.")
         p("Uncertainty and scope", heading)
         for n in [*brief.window.notes, *brief.evidence.notes, *brief.draft.uncertainty]:
             p("- " + safe(n))
@@ -68,6 +98,6 @@ def export_pdf(brief):
         except LayoutError:
             continue
         data = buffer.getvalue()
-        if len(PdfReader(BytesIO(data)).pages) == 1:
+        if not one_page or len(PdfReader(BytesIO(data)).pages) == 1:
             return data
-    raise BriefIQError("This briefing exceeds one readable PDF page. Nothing was truncated. Download the complete Markdown or retry a shorter briefing.")
+    raise BriefIQError("This briefing exceeds one readable PDF page. Nothing was truncated. Use the complete PDF or Markdown export.")
