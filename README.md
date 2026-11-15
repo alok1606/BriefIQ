@@ -23,6 +23,8 @@ Leave `BRIEFIQ_MODE=demo`. Click **Generate Briefing**. Demo uses only the ficti
 
 ## Live configuration
 
+**Free-tier option:** use Gemini 2.5 Flash-Lite through Bifrost. Follow [FREE_MODEL_SETUP.md](FREE_MODEL_SETUP.md) for the private key setup and the supplied gateway launcher. The example environment now selects Gemini; its free tier is quota-limited and depends on your Google project. GPT-4o-mini remains an optional paid provider choice.
+
 1. Obtain a Tavily API key from https://app.tavily.com and set `TAVILY_API_KEY` in `.env`.
 2. Run Maxim's Bifrost gateway locally or use your organization's existing authenticated gateway. An optional local evaluation command, requiring Node/npm, is `npx -y @maximhq/bifrost`. Alternatively run `docker run -p 8080:8080 maximhq/bifrost` if Docker is already installed. Neither is needed for demo. Configure a provider and its credentials in the Bifrost dashboard at http://localhost:8080; provider keys do not belong in this app.
 3. Set `BIFROST_BASE_URL=http://localhost:8080`, `BIFROST_MODEL=openai/gpt-4o-mini` (or your configured provider/model), and `BRIEFIQ_MODE=live`. Select Live in the sidebar.

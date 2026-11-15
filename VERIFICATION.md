@@ -25,3 +25,9 @@ Run: https://github.com/alok1606/BriefIQ/actions/runs/43683100525
 
 Both `test (3.11)` and `test (3.13)` completed successfully on Linux. Each job successfully executed `python -m pip install -r requirements.txt` and `python -m pytest -q`. This verifies clean dependency installation and the automated suite on both supported Python versions for the published application commit. Live credentials are not used in CI.
 
+## Free-tier provider setup
+
+Added a Gemini 2.5 Flash-Lite Bifrost launcher and free-tier setup guide. The example environment selects Gemini; the user's private `.env` model was updated without exposing or replacing the Tavily key. The launcher limits its configured provider key to this model and has no paid fallback. Billing-tier eligibility remains controlled by the Google project, not by BriefIQ.
+
+Latest local run in the project's clean `.venv`: **43 passed in 5.61 seconds**; `pip check` reported no broken requirements. Added tests verify missing-key handling, localhost binding, model restriction, and keeping provider credentials out of command arguments, configuration files, and output. The launcher was exercised without a Google key and correctly stopped with setup instructions. Actual gateway startup and Gemini inference remain unverified until a valid Google key is supplied locally.
+
