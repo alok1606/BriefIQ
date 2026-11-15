@@ -1,33 +1,31 @@
 # Executed verification
 
-Verified locally on Windows, Python 3.13.4, 15 November 2026.
+Verified on Windows, Python 3.13.4, 15 November 2026.
 
-- Full test suite: **41 passed in 7.21 seconds** (`python -m pytest -q`). Tests include mocked HTTP integrations and Streamlit AppTest demo generation.
-- Streamlit 1.45.1 server started successfully on `http://127.0.0.1:8501`.
-- HTTP checks: root page returned **200**; `/_stcore/health` returned **ok**.
-- Demo PDF: generated, reopened with pypdf, confirmed exactly one A4 page and three source-link annotations, rendered using Poppler, and visually inspected. No clipped content or missing references were observed.
-- Markdown export generated and tested; dangerous Markdown/HTML controls are escaped.
-- Source compile check completed successfully. Git whitespace checks completed successfully.
+## Current local checks
 
-## Boundaries
+- Full automated suite: **44 passed in 5.50 seconds** in the project's clean `.venv` (`python -m pytest -q`).
+- `python -m pip check`: **No broken requirements found**.
+- BriefIQ started at `http://127.0.0.1:8501`; its health endpoint returned **ok**.
+- Bifrost v2.4.0 started at `http://127.0.0.1:8787` with SQLite configuration storage and active governance.
+- Authenticated `GET /v1/models` succeeded and listed the selected model.
+- A real `POST /v1/chat/completions` through Bifrost to **Gemini 3.5 Flash-Lite** returned **HTTP 200** and valid JSON.
+- Full live pipeline: Microsoft meeting on 16 November 2026, Tavily's three searches, **12 retrieved sources**, **4 generated developments**, and citation-ID validation succeeded. The run was explicitly live, not fixture mode.
+- Live Markdown and one-page PDF exports were generated. The PDF was rendered with Poppler and visually inspected; no clipping or missing references was observed.
+- Demo mode, mocked HTTP failures/timeouts, citation rejection, uncertain dates, DST validation, PDF overflow handling, and Streamlit AppTest remain covered by automated tests.
 
-Live Tavily and Bifrost inference were **not exercised**: no live API credentials or running gateway were configured. HTTP request contracts, successful and failing responses, timeout retries, model discovery, malformed output handling, and the live pipeline were tested with mocks. Neither real search quality nor real provider behavior is claimed verified.
+## Windows gateway fixes
 
-Browser automation ended because it could not verify the Windows browser URL. Frontend validation therefore used Streamlit AppTest and HTTP startup checks; a visual browser screenshot/responsive layout audit was not completed.
+Windows rejected binding to port 8080 with socket error 10013. The launcher now tests local ports, falls back to a permitted port, and synchronizes `BIFROST_BASE_URL` in the private `.env`. It keeps localhost binding and inference authentication enforced. A scoped virtual key is generated/reused in `.env`; config.json references credentials through environment variables. The gateway key permits only the selected Gemini model. SQLite storage resolves the governance/auth initialization issues seen with the original file-only profile. An existing official Windows v2.4.0 binary is reused to avoid unnecessary downloads.
 
-Local dependency installation encountered download timeouts. Local QA used an isolated virtual environment with access to existing host packages, verified PyPI wheels for missing UI/test dependencies, and bundled ReportLab/pypdf packages. `pip check` on the shared local QA environment reported a pre-existing TensorFlow/protobuf conflict; TensorFlow is not used by BriefIQ. Clean installation was subsequently verified by GitHub Actions, as recorded below.
+Google rejected Gemini 2.5 Flash-Lite with HTTP 404 because it is unavailable to new accounts. Gemini 3.5 Flash-Lite was selected after its current official free-tier pricing was checked, and actual inference succeeded. Free-tier eligibility, quotas, and billing remain controlled by the user's Google project; a model name alone does not prove billing tier. No paid-provider fallback was configured.
 
-The complete source was published to `https://github.com/alok1606/BriefIQ` on main, commit `31db5da6b36d748ea107d6a8ac43f3cafcee706b`, using the authenticated GitHub connector. The local checkout was synchronized and tracks origin/main.
+## Earlier CI evidence
 
-## GitHub Actions verification
+https://github.com/alok1606/BriefIQ/actions/runs/43683100525
 
-Run: https://github.com/alok1606/BriefIQ/actions/runs/43683100525
+Both Python 3.11 and 3.13 jobs successfully performed clean installation and automated tests for the earlier application commit. CI uses mocks and never uses live credentials. Later source revisions have separate Actions runs and should be checked by commit.
 
-Both `test (3.11)` and `test (3.13)` completed successfully on Linux. Each job successfully executed `python -m pip install -r requirements.txt` and `python -m pytest -q`. This verifies clean dependency installation and the automated suite on both supported Python versions for the published application commit. Live credentials are not used in CI.
+## Limits
 
-## Free-tier provider setup
-
-Added a Gemini 2.5 Flash-Lite Bifrost launcher and free-tier setup guide. The example environment selects Gemini; the user's private `.env` model was updated without exposing or replacing the Tavily key. The launcher limits its configured provider key to this model and has no paid fallback. Billing-tier eligibility remains controlled by the Google project, not by BriefIQ.
-
-Latest local run in the project's clean `.venv`: **43 passed in 5.61 seconds**; `pip check` reported no broken requirements. Added tests verify missing-key handling, localhost binding, model restriction, and keeping provider credentials out of command arguments, configuration files, and output. The launcher was exercised without a Google key and correctly stopped with setup instructions. Actual gateway startup and Gemini inference remain unverified until a valid Google key is supplied locally.
-
+A successful live pipeline does not independently fact-check every retrieved article or establish exhaustive search coverage. Citation validation proves that referenced IDs were retrieved, not that every inference is correct. Review original pages and entity matches. Live publication dates and indexed content can be inaccurate or later edited. Browser visual/responsive auditing was not completed because Windows browser automation could not verify the browser URL; frontend checks used Streamlit AppTest, HTTP startup checks, and the user's screenshots. The Bifrost management API remains locked until a dashboard admin is separately configured; this does not block authenticated BriefIQ inference.
