@@ -1,0 +1,16 @@
+streamlit==1.45.1
+httpx==0.28.1
+pydantic==2.10.3
+python-dotenv==1.0.1
+reportlab==4.4.9
+tzdata==2025.2
+pytest==8.4.2
+pypdf==6.21.4
+# Keep Streamlit's major runtime dependencies reproducible.
+pandas==2.2.3
+numpy==2.3.4
+altair==5.5.0
+pyarrow==19.0.1
+protobuf==5.29.5
+cachetools==5.5.2
+packaging==24.2
