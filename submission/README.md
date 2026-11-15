@@ -10,9 +10,9 @@ https://github.com/alok1606/BriefIQ
 
 ## Demo Video Link
 
-https://raw.githubusercontent.com/alok1606/BriefIQ/main/submission/BriefIQ-demo.mp4
+https://raw.githubusercontent.com/alok1606/BriefIQ/main/submission/BriefIQ-demo-0.75x.mp4
 
-The video is a two-minute narrated product walkthrough using screenshots captured from the running application. It uses synthetic narration and is not a continuous screen recording. The link points directly to an MP4 video file hosted in the public GitHub repository.
+The video is a narrated product walkthrough at 0.75x voice speed using screenshots captured from the running application. It uses synthetic narration and is not a continuous screen recording. The link points directly to an MP4 video file hosted in the public GitHub repository.
 
 ## PPT File
 
@@ -21,7 +21,7 @@ Upload `BriefIQ-Hackathon-2026.pptx` from the supplied files. It contains nine e
 ## Included files
 
 - `BriefIQ-Hackathon-2026.pptx`: presentation for the PPT upload field.
-- `BriefIQ-demo.mp4`: narrated demo video, approximately two minutes, 1280 x 720.
+- `BriefIQ-demo.mp4`: narrated demo video, approximately 2 minutes 40 seconds, 1280 x 720.
 - `BriefIQ-demo.srt`: optional captions for the video.
 - This file: copy-and-paste form values.
 

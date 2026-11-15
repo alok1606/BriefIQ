@@ -7,12 +7,12 @@ A Python 3.11+ / Streamlit research agent for preparing a concise, source-attrib
 ## Hackathon submission
 
 - Project title: **BriefIQ: Pre-Meeting Briefing Agent**
-- [Demo video (MP4)](https://raw.githubusercontent.com/alok1606/BriefIQ/main/submission/BriefIQ-demo.mp4)
+- [Demo video (MP4)](https://raw.githubusercontent.com/alok1606/BriefIQ/main/submission/BriefIQ-demo-0.75x.mp4)
 - [Presentation (PPTX)](submission/BriefIQ-Hackathon-2026.pptx)
 - [Copy-and-paste submission fields](submission/README.md)
 - [Video captions](submission/BriefIQ-demo.srt)
 
-The two-minute demo is a narrated walkthrough using screenshots from the running application, with synthetic narration. It is not a continuous screen recording or a public app deployment.
+The demo runs approximately 2 minutes 40 seconds at 0.75x narration speed. It is a narrated walkthrough using screenshots from the running application, with synthetic narration. It is not a continuous screen recording or a public app deployment.
 
 ## Run on Windows in VS Code (no administrator rights)
 
